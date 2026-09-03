@@ -44,6 +44,16 @@ No long-lived `NPM_TOKEN` is needed. The workflow has the required
 deployment environment is added later, configure the same environment name in
 both npm and the workflow.
 
+After trusted publishing is configured, create the matching first GitHub
+Release if desired:
+
+```sh
+gh release create v0.1.0 --generate-notes
+```
+
+The workflow detects that `0.1.0` was already published manually and skips the
+duplicate `npm publish` operation after running all checks.
+
 ## Subsequent releases
 
 Start with a clean, passing `main` branch, then choose the appropriate semantic

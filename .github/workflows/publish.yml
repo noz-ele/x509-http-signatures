@@ -24,4 +24,16 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
-      - run: npm publish --access public
+      - name: Check whether this version is already published
+        id: published
+        shell: bash
+        run: |
+          package_spec="$(node -p "require('./package.json').name + '@' + require('./package.json').version")"
+          if npm view "$package_spec" version >/dev/null 2>&1; then
+            echo "value=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Publish to npm
+        if: steps.published.outputs.value != 'true'
+        run: npm publish --access public
