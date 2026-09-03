@@ -1,18 +1,18 @@
 # Releasing
 
-## Current prerequisites
+## Prerequisites
 
 - The GitHub repository is `noz-ele/x509-http-signatures`.
 - The npm package name is `@noz-ele/x509-http-signatures`.
 - npm authentication and permission to publish under the `@noz-ele` scope are
   required.
-- Public GitHub visibility is recommended before a public npm release so that
-  users can inspect the source and npm can attach public provenance.
+- The GitHub repository and npm package are public.
 
-## First npm release
+## Manual npm release
 
-The first release establishes the package on npm. Run it interactively from a
-clean checkout because npm authentication or 2FA approval is required.
+Run releases interactively from a clean checkout because npm authentication or
+2FA approval may be required. Choose the appropriate semantic version increment
+and replace `<version>` below with the resulting version.
 
 ```sh
 npm login
@@ -21,54 +21,19 @@ npm ci
 npm run typecheck
 npm test
 npm pack --dry-run
+npm version patch
+git push origin main --follow-tags
 npm publish --access public
+gh release create v<version> --verify-tag --generate-notes
 ```
 
 Confirm that `npm whoami` is a member or owner of the `noz-ele` npm
-organization and is allowed to create public packages in that scope.
-
-## Configure trusted publishing
-
-After the package exists on npm, open its settings and add a GitHub Actions
-trusted publisher with these exact values:
-
-```text
-Organization or user: noz-ele
-Repository: x509-http-signatures
-Workflow filename: publish.yml
-Allowed action: npm publish
-```
-
-No long-lived `NPM_TOKEN` is needed. The workflow has the required
-`id-token: write` permission and uses a GitHub-hosted runner. If an npm
-deployment environment is added later, configure the same environment name in
-both npm and the workflow.
-
-After trusted publishing is configured, create the matching first GitHub
-Release if desired:
+organization and is allowed to publish public packages in that scope. Verify
+the published version with:
 
 ```sh
-gh release create v0.1.0 --generate-notes
+npm view @noz-ele/x509-http-signatures version dist-tags.latest
 ```
-
-The workflow detects that `0.1.0` was already published manually and skips the
-duplicate `npm publish` operation after running all checks.
-
-## Subsequent releases
-
-Start with a clean, passing `main` branch, then choose the appropriate semantic
-version increment:
-
-```sh
-npm version patch
-git push origin main --follow-tags
-gh release create v<version> --generate-notes
-```
-
-Publishing the GitHub Release triggers `.github/workflows/publish.yml`. The
-workflow verifies that the release tag exactly matches the version in
-`package.json`, installs from `package-lock.json`, runs checks, and publishes
-through npm trusted publishing.
 
 Never reuse a published version. If a release fails after a version has reached
 npm, fix the problem and publish a new patch version.

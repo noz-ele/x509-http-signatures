@@ -173,8 +173,7 @@ npm test
 npm pack --dry-run
 ```
 
-Maintainers should follow [RELEASING.md](RELEASING.md) for the first npm
-publication and the GitHub trusted-publishing workflow used by later releases.
+Maintainers should follow [RELEASING.md](RELEASING.md) for npm publication.
 
 ## Security
 
