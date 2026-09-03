@@ -1,0 +1,81 @@
+{
+  "name": "@noz-ele/x509-http-signatures",
+  "version": "0.1.0",
+  "description": "X.509 proof of possession for HTTP requests using RFC 9440, RFC 9421, and EdgCA.",
+  "type": "module",
+  "license": "MIT",
+  "author": "NOZ-ELE",
+  "homepage": "https://github.com/noz-ele/x509-http-signatures#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noz-ele/x509-http-signatures.git"
+  },
+  "bugs": {
+    "url": "https://github.com/noz-ele/x509-http-signatures/issues"
+  },
+  "keywords": [
+    "x509",
+    "http-message-signatures",
+    "rfc9421",
+    "rfc9440",
+    "rfc9530",
+    "mtls",
+    "cloudflare-workers",
+    "proof-of-possession"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "SECURITY.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js"
+    },
+    "./rfc9440": {
+      "types": "./dist/rfc9440.d.ts",
+      "import": "./dist/rfc9440.js"
+    },
+    "./cloudflare": {
+      "types": "./dist/cloudflare.d.ts",
+      "import": "./dist/cloudflare.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "x509-http-signatures": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "pretest": "npm run build",
+    "test": "vitest run",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run typecheck && npm test"
+  },
+  "dependencies": {
+    "@noz-ele/edgca": "^0.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
+  }
+}
